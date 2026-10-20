@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kredit to‘lovlari</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kredit">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#E8ECE6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121815" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<style id="css">
+:root{
+  --bg:#E8ECE6; --surface:#F7F8F4; --ink:#1B2620; --muted:#5F6B64; --line:#CBD3CB; --soft:#DDE3DB;
+  --paid:#2E7D4F; --paid-bg:#DCEEDF; --late:#B3261E; --late-bg:#F6DEDA;
+  --c-xonsaroy:#2F5D8C; --c-mb:#A0522D; --c-sado:#7A4FA0; --c-jomiy:#A86B12; --c-byd:#23767A;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121815; --surface:#1A221E; --ink:#E3EAE4; --muted:#97A39C; --line:#323E37; --soft:#24302A;
+  --paid:#6CCB8F; --paid-bg:#1F3A29; --late:#FF8A7A; --late-bg:#3D211D;
+  --c-xonsaroy:#7FAEE0; --c-mb:#E39468; --c-sado:#C29BE6; --c-jomiy:#E8B04F; --c-byd:#5FC4C7;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121815; --surface:#1A221E; --ink:#E3EAE4; --muted:#97A39C; --line:#323E37; --soft:#24302A;
+  --paid:#6CCB8F; --paid-bg:#1F3A29; --late:#FF8A7A; --late-bg:#3D211D;
+  --c-xonsaroy:#7FAEE0; --c-mb:#E39468; --c-sado:#C29BE6; --c-jomiy:#E8B04F; --c-byd:#5FC4C7;
+  color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--font);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+
+.hero{padding:8px 2px 18px}
+.hero h1{margin:0 0 14px;font-size:15px;font-weight:600;color:var(--muted)}
+.big{font-size:clamp(38px,11vw,64px);font-weight:800;line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.big small{font-size:.38em;font-weight:600;letter-spacing:0;color:var(--muted);margin-left:6px}
+.sub{margin:8px 0 0;color:var(--muted);font-size:14px}
+.track{position:relative;height:12px;margin-top:16px;border-radius:6px;background:var(--soft);overflow:hidden}
+.track i{position:absolute;inset:0 auto 0 0;background:var(--paid);border-radius:6px;transition:width .5s ease}
+.legend{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend b{color:var(--ink);font-weight:600}
+
+.loans{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+.loans::-webkit-scrollbar{display:none}
+.chip{flex:none;min-width:142px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px 11px;cursor:pointer}
+.chip .nm{display:flex;align-items:center;gap:7px;font-weight:700;font-size:14px}
+.chip .nm::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip .rm{display:block;margin-top:4px;font-size:13px;font-variant-numeric:tabular-nums}
+.chip .mo{display:block;font-size:12px;color:var(--muted)}
+.chip .mini{display:block;height:4px;border-radius:2px;background:var(--soft);margin-top:8px;overflow:hidden}
+.chip .mini i{display:block;height:100%;background:var(--c)}
+.chip[aria-pressed="true"]{border-color:var(--c);box-shadow:inset 0 0 0 1.5px var(--c)}
+.chip.all{min-width:96px}
+.chip.all .nm::before{background:var(--ink)}
+
+.month{margin-top:18px}
+.mh{position:sticky;top:0;z-index:2;display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 2px 8px;background:var(--bg)}
+.mh h2{margin:0;font-size:18px;font-weight:700;text-transform:capitalize}
+.mh .tot{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.mh .tot b{color:var(--ink);font-weight:600}
+.month.now .mh h2::after{content:"shu oy";margin-left:8px;font-size:12px;font-weight:600;color:var(--surface);background:var(--ink);padding:2px 8px;border-radius:10px;vertical-align:3px}
+.month.done .mh h2{color:var(--paid)}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.pay{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:12px 14px 12px 10px;cursor:pointer;min-height:62px}
+.pay:first-child{border-top:0}
+.box{width:30px;height:30px;margin-left:4px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;transition:background .2s,border-color .2s}
+.box svg{width:18px;height:18px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .2s}
+.who{min-width:0}
+.who .n{display:flex;align-items:center;gap:7px;font-weight:600}
+.who .n::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.who .d{display:block;font-size:12.5px;color:var(--muted)}
+.amt{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.amt small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.pay.extra .who .d{color:var(--ink);font-weight:500}
+.pay.extra{background:color-mix(in srgb,var(--c) 7%,transparent)}
+.pay.on{background:var(--paid-bg)}
+.pay.on .box{background:var(--paid);border-color:var(--paid)}
+.pay.on .box svg{opacity:1;transform:none}
+.pay.on .amt{color:var(--paid)}
+.pay.on .who .d::after{content:" — to‘landi"}
+.pay.late:not(.on) .box{border-color:var(--late)}
+.pay.late:not(.on) .who .d{color:var(--late);font-weight:600}
+.pay.late:not(.on) .who .d::after{content:" — muddati o‘tgan"}
+.pay:disabled{cursor:default}
+
+details.set{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+details.set summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none}
+details.set summary::-webkit-details-marker{display:none}
+details.set summary::after{content:"+";float:right;color:var(--muted)}
+details.set[open] summary::after{content:"–"}
+.fields{padding:0 16px 16px;display:grid;gap:10px}
+.fields label{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px}
+.fields input{width:150px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.fields .hint{font-size:12.5px;color:var(--muted);margin:0}
+
+.bk{display:flex;gap:8px;flex-wrap:wrap}
+.bk button{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;font-weight:600;font-size:14px}
+.fields textarea{width:100%;min-height:70px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:12px/1.4 ui-monospace,Menlo,monospace}
+.status{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:20px;font-size:13px;font-weight:500;transition:opacity .25s,transform .25s;pointer-events:none;z-index:5}
+.status.show{opacity:1;transform:translate(-50%,0)}
+.ro{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--soft);font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script id="state" type="application/json">{"rate":12100,"starts":{"xonsaroy":"2026-11","mb":"2026-11","sado":"2026-11","jomiy":"2026-11","byd":"2026-11"},"paid":{}}</script>
+<script id="app">
+(function(){
+const LOANS=[
+  {id:"xonsaroy",name:"Xonsaroy",cur:"so‘m",m:7882000,n:12,extras:[]},
+  {id:"mb",name:"MB",cur:"so‘m",m:11348786,n:14,extras:[]},
+  {id:"sado",name:"Sado",cur:"so‘m",m:5000000,n:18,extras:[["2027-03",97000000],["2027-09",97000000],["2028-05",501000000]]},
+  {id:"jomiy",name:"Jomiy",cur:"so‘m",m:5000000,n:18,extras:[["2027-01",97200000],["2027-07",97200000],["2027-11",533400000]]},
+  {id:"byd",name:"BYD",cur:"$",m:1500,n:12,extras:[]}
+];
+const MONTHS=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+let S=JSON.parse(document.getElementById("state").textContent);
+let filter="all", artifact=null, readOnly=false, timer=null, dirty=false, useLocal=false;
+
+const grp=n=>Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"\u202F");
+const money=(v,cur)=>cur==="$"?"$"+grp(v):grp(v)+" so‘m";
+const toSom=(v,cur)=>cur==="$"?v*(+S.rate||0):v;
+const addM=(ym,k)=>{let[y,m]=ym.split("-").map(Number);m=m-1+k;y+=Math.floor(m/12);m=((m%12)+12)%12;return y+"-"+String(m+1).padStart(2,"0")};
+const now=new Date(), NOW=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+const mLabel=ym=>{const[y,m]=ym.split("-");return MONTHS[+m-1]+" "+y};
+
+function schedule(){
+  const out=[];
+  for(const L of LOANS){
+    const st=S.starts[L.id]||"2026-11";
+    for(let k=1;k<=L.n;k++) out.push({id:L.id+"-m"+k,L,ym:addM(st,k-1),amt:L.m,label:k+"-oy, "+L.n+" tadan",extra:false,ord:0});
+    L.extras.forEach((e,i)=>out.push({id:L.id+"-x"+(i+1),L,ym:e[0],amt:e[1],label:"Qo‘shimcha to‘lov",extra:true,ord:1}));
+  }
+  out.sort((a,b)=>a.ym<b.ym?-1:a.ym>b.ym?1:a.ord-b.ord||LOANS.indexOf(a.L)-LOANS.indexOf(b.L));
+  return out;
+}
+function stats(sch){
+  const per={}; let tot=0,paid=0;
+  for(const L of LOANS) per[L.id]={tot:0,paid:0,cnt:0,done:0};
+  for(const p of sch){const s=per[p.L.id]; s.tot+=p.amt; if(!p.extra)s.cnt++;
+    if(S.paid[p.id]){s.paid+=p.amt; if(!p.extra)s.done++; paid+=toSom(p.amt,p.L.cur);} tot+=toSom(p.amt,p.L.cur);}
+  return {per,tot,paid,left:tot-paid};
+}
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render(keepScroll){
+  const sch=schedule(), st=stats(sch), pct=st.tot?st.paid/st.tot:0;
+  const byd=LOANS.find(l=>l.id==="byd"), bs=st.per.byd;
+  let h='<div class="wrap">';
+  if(readOnly) h+='<p class="ro">Bu sahifani faqat ko‘rishingiz mumkin, belgilar saqlanmaydi.</p>';
+  h+='<section class="hero"><h1>Umumiy qoldiq</h1>'+
+     '<div class="big">'+grp(st.left)+'<small>so‘m</small></div>'+
+     '<p class="sub">BYD qoldig‘i '+money(bs.tot-bs.paid,"$")+' — 1 $ = '+grp(S.rate)+' so‘m kurs bilan hisoblandi</p>'+
+     '<div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct*100)+'"><i style="width:'+(pct*100).toFixed(2)+'%"></i></div>'+
+     '<div class="legend"><span>To‘landi <b>'+grp(st.paid)+'</b></span><span>Jami <b>'+grp(st.tot)+'</b></span></div></section>';
+  h+='<nav class="loans" aria-label="Kreditlar"><button class="chip all" data-f="all" aria-pressed="'+(filter==="all")+'"><span class="nm">Hammasi</span><span class="mo">'+Math.round(pct*100)+'% to‘landi</span></button>';
+  for(const L of LOANS){const s=st.per[L.id];
+    h+='<button class="chip" style="--c:var(--c-'+L.id+')" data-f="'+L.id+'" aria-pressed="'+(filter===L.id)+'"><span class="nm">'+esc(L.name)+'</span>'+
+       '<span class="rm">'+money(s.tot-s.paid,L.cur)+'</span><span class="mo">'+s.done+' / '+s.cnt+' oy to‘landi</span>'+
+       '<span class="mini"><i style="width:'+(s.tot?s.paid/s.tot*100:0)+'%"></i></span></button>';}
+  h+='</nav>';
+  const months={}; for(const p of sch){ if(filter!=="all"&&p.L.id!==filter) continue; (months[p.ym]=months[p.ym]||[]).push(p); }
+  for(const ym of Object.keys(months)){
+    const ps=months[ym]; let due=0,left=0;
+    for(const p of ps){const v=toSom(p.amt,p.L.cur); due+=v; if(!S.paid[p.id]) left+=v;}
+    const done=left===0;
+    h+='<section class="month'+(ym===NOW?' now':'')+(done?' done':'')+'" id="m'+ym+'"><div class="mh"><h2>'+mLabel(ym)+'</h2>'+
+       '<div class="tot">'+(done?'Hammasi to‘landi':'Qoldi <b>'+grp(left)+' so‘m</b>')+'<br>jami '+grp(due)+' so‘m</div></div><div class="list">';
+    for(const p of ps){const on=!!S.paid[p.id], late=ym<NOW;
+      h+='<button class="pay'+(p.extra?' extra':'')+(on?' on':'')+(late?' late':'')+'" style="--c:var(--c-'+p.L.id+')" data-id="'+p.id+'" aria-pressed="'+on+'"'+(readOnly?' disabled':'')+'>'+
+         '<span class="box">'+CHECK+'</span><span class="who"><span class="n">'+esc(p.L.name)+'</span><span class="d">'+p.label+'</span></span>'+
+         '<span class="amt">'+money(p.amt,p.L.cur)+(p.L.cur==="$"?'<small>≈ '+grp(toSom(p.amt,"$"))+' so‘m</small>':'')+'</span></button>';}
+    h+='</div></section>';
+  }
+  h+='<details class="set"'+(document.querySelector("details.set[open]")?' open':'')+'><summary>Sozlamalar</summary><div class="fields">'+
+     '<label>Dollar kursi (1 $ = so‘m)<input type="number" inputmode="numeric" min="0" id="rate" value="'+esc(S.rate)+'"'+(readOnly?' disabled':'')+'></label>'+
+     '<p class="hint">Birinchi oylik to‘lov oyi:</p>';
+  for(const L of LOANS) h+='<label>'+esc(L.name)+'<input type="month" data-start="'+L.id+'" value="'+esc(S.starts[L.id]||"2026-11")+'"'+(readOnly?' disabled':'')+'></label>';
+  h+='<p class="hint">Qo‘shimcha to‘lovlar sanasi o‘zgarmaydi. Belgini olib tashlash uchun qatorni yana bir marta bosing.</p>'+
+     '<p class="hint" style="margin-top:8px"><b style="color:var(--ink)">Zaxira nusxa.</b> Belgilar faqat shu telefonda saqlanadi. Vaqti-vaqti bilan nusxalab, Notes’ga saqlab qo‘ying.</p>'+
+     '<div class="bk"><button type="button" id="bkCopy">Nusxalash</button><button type="button" id="bkLoad">Nusxadan tiklash</button></div>'+
+     '<textarea id="bkText" placeholder="Tiklash uchun nusxani shu yerga joylang"></textarea></div></details></div><div class="status" id="status"></div>';
+  const y=scrollY; document.getElementById("root").innerHTML=h; if(keepScroll) scrollTo(0,y);
+}
+
+function toast(t,ms){const el=document.getElementById("status"); if(!el)return; el.textContent=t; el.classList.add("show"); clearTimeout(toast.t); if(ms) toast.t=setTimeout(()=>el.classList.remove("show"),ms);}
+function save(){
+  try{localStorage.setItem("kredit-state",JSON.stringify(S));}catch(e){toast("Saqlab bo‘lmadi",2500);}
+}
+
+document.addEventListener("click",e=>{
+  if(e.target.id==="bkCopy"){const t=JSON.stringify(S),ta=document.getElementById("bkText");ta.value=t;
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast("Nusxa olindi",1800),()=>{ta.select();toast("Matnni belgilab, nusxalang",2500)});return;}
+  if(e.target.id==="bkLoad"){try{const P=JSON.parse(document.getElementById("bkText").value);
+    if(!P||typeof P.paid!=="object"||!P.starts) throw 0; if(!confirm("Hozirgi belgilar nusxadagisi bilan almashtirilsinmi?")) return;
+    S={rate:+P.rate||S.rate,starts:Object.assign({},S.starts,P.starts),paid:P.paid}; save(); render(true); toast("Tiklandi",1800);}
+    catch(_){toast("Nusxa noto‘g‘ri",2500);} return;}
+  const c=e.target.closest(".chip"); if(c){filter=c.dataset.f; render(false); return;}
+  const p=e.target.closest(".pay"); if(p&&!readOnly){const id=p.dataset.id; if(S.paid[id]) delete S.paid[id]; else S.paid[id]=1; render(true); save();}
+});
+document.addEventListener("change",e=>{
+  if(readOnly) return;
+  if(e.target.id==="rate"){const v=Math.max(0,+e.target.value||0); S.rate=v; render(true); save();}
+  const k=e.target.dataset&&e.target.dataset.start; if(k&&/^\d{4}-\d{2}$/.test(e.target.value)){S.starts[k]=e.target.value; render(true); save();}
+});
+
+render(false);
+const target=document.getElementById("m"+NOW); if(target) target.scrollIntoView({block:"start"});
+
+try{ const ls=localStorage.getItem("kredit-state"); if(ls){ S=Object.assign(S,JSON.parse(ls)); render(true);} }catch(e){}
+if("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
